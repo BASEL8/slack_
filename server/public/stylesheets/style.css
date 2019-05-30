@@ -1,0 +1,31 @@
+#messages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+ul.success {
+  list-style: none;
+  padding: 0;
+}
+ul.success li {
+  padding: 15px;
+  margin: 10px auto;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #3c763d;
+  background-color: #dff0df;
+  border-color: #d6e9c6;
+}
+ul.error {
+  list-style: none;
+  padding: 0;
+}
+ul.error li {
+  padding: 15px;
+  margin: 10px auto;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #763c3c;
+  background-color: #f9c7c7;
+  border-color: #afa19b;
+}
