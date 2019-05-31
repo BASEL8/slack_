@@ -108,11 +108,76 @@ server.listen(3001, () => {
   io.on("connection", (socket) => {
     console.log("connected from messages");
     socket.on("create channel", ({ channelName, by }) => {
-      console.log(channelName);
       new Channels({ channelName, by }).save().then((res) => {
-        console.log(res);
         io.emit("update");
       });
+    });
+    socket.on("loggedOut", ({ _id }) => {
+      io.emit("update");
+    });
+    socket.on("logggedIn", () => {
+      io.emit("update");
+    });
+    socket.on("delete.channel", ({ id }) => {
+      Channels.findById(id, function(err, doc) {
+        if (err) {
+          console.log(err);
+        }
+        doc.remove();
+        io.emit("update");
+      });
+    });
+    socket.on("message.sent", ({ _id, text, by, Data, userID }) => {
+      Channels.findOne({ _id: _id }).then((channel) => {
+        channel.messages.push({
+          text,
+          by,
+          userID,
+          profileImage: Data.profileImage
+        });
+        if (!channel.users.find((x) => x.id === Data._id))
+          channel.users.push(Data);
+        channel.save();
+      });
+      io.emit("update");
+    });
+    socket.on("delete.message", ({ channelId, _id }) => {
+      Channels.update(
+        { _id: channelId },
+        { $pull: { messages: { _id: _id } } },
+        { safe: true, multi: true },
+        function(err, obj) {
+          //do something smart
+          if (err) {
+            console.log(err);
+          } else {
+            io.emit("update");
+          }
+        }
+      );
+    });
+    socket.on("edit.message", ({ channelId, _id, value }) => {
+      Channels.findOneAndUpdate(
+        {
+          _id: channelId,
+          messages: { $elemMatch: { _id: _id } }
+        },
+        {
+          $set: {
+            "messages.$.text": value,
+            "messages.$.edited": true
+          }
+        }, // list fields you like to change
+        { new: true, safe: true, upsert: true },
+        function(err, obj) {
+          //do something smart
+          if (err) {
+            console.log(err);
+          } else {
+            io.emit("update");
+          }
+        }
+      );
     });
   });
 });

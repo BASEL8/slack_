@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Mukta");
 #root {
   height: 100%;
-  background: rgba(0, 0, 0, 0.616);
+  background: rgba(0, 0, 0, 0.856);
 }
 body {
   font-family: "Mukta", sans-serif;
@@ -16,7 +16,7 @@ body {
 }
 a {
   text-decoration: none;
-  color: #444444;
+  color: #44444471;
 }
 .login-reg-panel {
   position: relative;
@@ -158,4 +158,44 @@ a {
 a {
   text-decoration: none;
   color: #2c7715;
+}
+.contacts,
+.user_info_ul {
+  overflow: scroll;
+}
+.user_info_ul li {
+  background: none;
+  color: white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.user_info_ul li div {
+  width: 40px;
+}
+.user-logo {
+  border-radius: 50%;
+  background: white;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.user-logo img {
+  height: 100%;
+}
+.message-text {
+  border-radius: 20px !important;
+  width: 50%;
+  padding: 5px 10px !important;
+  font-size: 14px;
+  background: none;
+  border: none;
+  color: white;
+}
+.btn-basel {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }

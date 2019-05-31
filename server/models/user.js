@@ -21,6 +21,10 @@ const UserSchema = mongoose.Schema({
   },
   profileImage: {
     type: String
+  },
+  status: {
+    type: Boolean,
+    default: false
   }
 });
 const User = (module.exports = mongoose.model("User", UserSchema));
@@ -29,7 +33,13 @@ module.exports.getUserById = function(id, callback) {
 };
 module.exports.getUserByEmail = function(username, callback) {
   const query = { username };
-  User.findOne(query, callback);
+  // User.findOne(query, callback);
+  User.findOneAndUpdate(query, { $set: { status: true } }, callback);
+};
+module.exports.logOut = function(_id, callback) {
+  const query = { _id };
+  // User.findOne(query, callback);
+  User.findOneAndUpdate(query, { $set: { status: false } }, callback);
 };
 module.exports.checkIfRegistered = function(username, callback) {
   const query = { username, callback };

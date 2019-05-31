@@ -14,6 +14,7 @@ router.get("/", (req, res, next) => {
 router.post("/login", passport.authenticate("local"), function(req, res) {
   User.getUserByEmail(req.body.username, (err, user) => {
     if (err) throw err;
+    user.password = undefined;
     res.status(200).send(user);
   });
 });
@@ -80,8 +81,12 @@ router.post("/register", upload.single("profileImage"), (req, res, next) => {
   });
 });
 router.get("/logout", function(req, res) {
-  req.logout();
-  res.status(200).send({ isAuthenticated: req.isAuthenticated() });
+  User.logOut(req.user._id, (err, user) => {
+    if (err) throw err;
+    req.logout();
+    res.status(200).send({ isAuthenticated: req.isAuthenticated() });
+  });
+
   //req.flash("success", "you are logged out");
   // res.location("/users/login");
 });

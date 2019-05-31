@@ -15,7 +15,12 @@ router.get("/", function(req, res) {
   Channels.find({})
     .sort({ data: "desc" })
     .then((channels) => {
-      Users.find({}).then((users) => res.send({ channels, users }));
+      Users.find({}).then((users) => {
+        for (let index = 0; index < users.length; index++) {
+          users[index].password = undefined;
+        }
+        res.send({ channels, users });
+      });
     });
 });
 

@@ -23,6 +23,7 @@ function App() {
       setAuth(res.data.isAuthenticated || false);
       if (auth) {
         axios.post("/users/login", loginInfo).then((res) => {
+          console.log(res.data);
           setData(res.data);
         });
       }
@@ -35,6 +36,7 @@ function App() {
       setLoginInfo({ username, password });
       setUserName("");
       setPassword("");
+
       if (res.status === 200) {
         axios.get("/isAuth").then((res) => setAuth(res.data.isAuthenticated));
       }
@@ -57,19 +59,10 @@ function App() {
         }
       });
   };
-  const logOut = () => {
-    axios.get("/users/logout").then((res) => {
-      setAuth(res.data.isAuthenticated);
-      setLoginInfo({ username: "", password: "" });
-    });
-  };
+
   return auth ? (
-    <div className=" h-100 flex-column d-flex justify-content-center align-items-center">
-      <Body Data={Data} />
-      <p>success</p>
-      <button className="btn btn-success btn-lg" onClick={() => logOut()}>
-        logout
-      </button>
+    <div className=" h-100 flex-column d-flex justify-content-center align-items-center p-2">
+      <Body Data={Data} setAuth={setAuth} setLoginInfo={setLoginInfo} />
     </div>
   ) : (
     <>
