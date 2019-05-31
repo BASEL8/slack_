@@ -18,7 +18,7 @@ const expressValidator = require("express-validator");
 
 const routes = require("./routes/index");
 const users = require("./routes/users");
-const messages = require("./routes/messages");
+const channels = require("./routes/channnels");
 
 const http = require("http");
 const app = express();
@@ -73,8 +73,7 @@ app.get("*", function(req, res, next) {
 });
 app.use("/isAuth", routes);
 app.use("/users", users);
-app.use("/messages", messages);
-
+app.use("/channels", channels);
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error("NOT FOUND");
@@ -102,5 +101,18 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+require("./models/Channels");
+const Channels = mongoose.model("channels");
 
-server.listen(3001);
+server.listen(3001, () => {
+  io.on("connection", (socket) => {
+    console.log("connected from messages");
+    socket.on("create channel", ({ channelName, by }) => {
+      console.log(channelName);
+      new Channels({ channelName, by }).save().then((res) => {
+        console.log(res);
+        io.emit("update");
+      });
+    });
+  });
+});

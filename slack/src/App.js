@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from "react";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import "./App.css";
-//import socketIOClient from "socket.io-client";
 import axios from "axios";
 import Body from "./Body/body";
-//let socket = socketIOClient("http://localhost:3001/");
 
 function App() {
   const [auth, setAuth] = useLocalStorage("isAuth", false);
+  const [loginInfo, setLoginInfo] = useLocalStorage({
+    username: "",
+    password: ""
+  });
   const [name, setName] = useState("");
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileImage, setProfileImage] = useState({});
+  const [Data, setData] = useState("");
 
   const [toggleLoginPanel, setToggle] = useState(true);
   useEffect(() => {
     axios.get("/isAuth").then((res) => {
       setAuth(res.data.isAuthenticated || false);
+      if (auth) {
+        axios.post("/users/login", loginInfo).then((res) => {
+          setData(res.data);
+        });
+      }
     });
-  }, [auth, setAuth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const login = () => {
     axios.post("/users/login", { username, password }).then((res) => {
+      setData(res.data);
+      setLoginInfo({ username, password });
       setUserName("");
       setPassword("");
       if (res.status === 200) {
@@ -29,12 +41,14 @@ function App() {
     });
   };
   const register = () => {
+    console.log(profileImage);
     axios
       .post("/users/register", {
         username,
         password,
         confirmPassword,
-        name
+        name,
+        profileImage
       })
       .then((res) => {
         console.log(res);
@@ -44,11 +58,14 @@ function App() {
       });
   };
   const logOut = () => {
-    axios.get("/users/logout").then((res) => setAuth(res.data.isAuthenticated));
+    axios.get("/users/logout").then((res) => {
+      setAuth(res.data.isAuthenticated);
+      setLoginInfo({ username: "", password: "" });
+    });
   };
   return auth ? (
     <div className=" h-100 flex-column d-flex justify-content-center align-items-center">
-      <Body />
+      <Body Data={Data} />
       <p>success</p>
       <button className="btn btn-success btn-lg" onClick={() => logOut()}>
         logout
@@ -115,6 +132,12 @@ function App() {
               placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+            <input
+              type="file"
+              onChange={(e) => {
+                setProfileImage(e.target.files[0]);
+              }}
             />
             <input type="button" value="Register" onClick={() => register()} />
           </div>

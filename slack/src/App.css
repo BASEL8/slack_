@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Mukta");
 #root {
   height: 100%;
+  background: rgba(0, 0, 0, 0.616);
 }
 body {
   font-family: "Mukta", sans-serif;

@@ -12,7 +12,10 @@ router.get("/", (req, res, next) => {
   res.send("respond with a resource");
 });
 router.post("/login", passport.authenticate("local"), function(req, res) {
-  res.status(200).send("done");
+  User.getUserByEmail(req.body.username, (err, user) => {
+    if (err) throw err;
+    res.status(200).send(user);
+  });
 });
 passport.serializeUser(function(user, done) {
   done(null, user.id);
