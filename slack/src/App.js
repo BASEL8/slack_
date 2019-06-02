@@ -14,7 +14,7 @@ function App() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImage, setProfileImage] = useState({});
+  const [profileImage] = useState({});
   const [Data, setData] = useState("");
 
   const [toggleLoginPanel, setToggle] = useState(true);
@@ -23,7 +23,6 @@ function App() {
       setAuth(res.data.isAuthenticated || false);
       if (auth) {
         axios.post("/users/login", loginInfo).then((res) => {
-          console.log(res.data);
           setData(res.data);
         });
       }
@@ -61,7 +60,7 @@ function App() {
   };
 
   return auth ? (
-    <div className=" h-100 flex-column d-flex justify-content-center align-items-center p-2">
+    <div className=" h-100 flex-column d-flex justify-content-center align-items-center p-1">
       <Body Data={Data} setAuth={setAuth} setLoginInfo={setLoginInfo} />
     </div>
   ) : (
@@ -126,13 +125,22 @@ function App() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            <div className="custom-file">
+              <input
+                type="file"
+                className="custom-file-input"
+                id="customFile"
+              />
+              <label className="custom-file-label" htmlFor="customFile">
+                Choose file
+              </label>
+            </div>
             <input
-              type="file"
-              onChange={(e) => {
-                setProfileImage(e.target.files[0]);
-              }}
+              className="mt-4"
+              type="button"
+              value="Register"
+              onClick={() => register()}
             />
-            <input type="button" value="Register" onClick={() => register()} />
           </div>
 
           <div

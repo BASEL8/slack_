@@ -28,11 +28,11 @@ a {
   left: 0;
   margin: auto;
   height: 400px;
-  background-color: rgba(236, 48, 20, 0.9);
+  background-color: #1da83f;
 }
 .white-panel {
   background-color: rgba(255, 255, 255, 1);
-  height: 500px;
+  height: 550px;
   position: absolute;
   top: -50px;
   width: 50%;
@@ -46,11 +46,11 @@ a {
   display: none;
 }
 .login-reg-panel {
-  color: #b8b8b8;
+  color: #eeecec;
 }
 .login-reg-panel #label-login,
 .login-reg-panel #label-register {
-  border: 1px solid #9e9e9e;
+  border: 1px solid #e7e4e4;
   padding: 5px 5px;
   width: 150px;
   display: block;
@@ -100,13 +100,17 @@ a {
   display: block;
   margin: 20px 0;
   padding: 15px;
-  border: 1px solid #b5b5b5;
+  background: #1da83f;
+  border: none;
   outline: none;
+  border-radius: 5px;
+  box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.5);
+  color: white;
 }
 .login-show input[type="button"] {
   max-width: 150px;
   width: 100%;
-  background: #444444;
+  background: #1da83f;
   color: #f9f9f9;
   border: none;
   padding: 10px;
@@ -114,6 +118,8 @@ a {
   border-radius: 2px;
   float: right;
   cursor: pointer;
+  box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
 }
 .login-show a {
   display: inline-block;
@@ -121,18 +127,49 @@ a {
 }
 
 .register-show input[type="text"],
-.register-show input[type="password"] {
+.register-show input[type="password"],
+.customFile {
   width: 100%;
   display: block;
   margin: 20px 0;
   padding: 15px;
-  border: 1px solid #b5b5b5;
+  border: none;
   outline: none;
+  border-radius: 5px;
+  background: #1da83f;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  color: white;
 }
+.login-show input[type="text"]::placeholder,
+.login-show input[type="password"]::placeholder,
+.register-show input[type="text"]::placeholder,
+.register-show input[type="password"]::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 1; /* Firefox */
+}
+.login-show input[type="text"]:-ms-input-placeholder,
+.login-show input[type="password"]:-ms-input-placeholder,
+.register-show input[type="text"]:-ms-input-placeholder,
+.register-show input[type="password"]:-ms-input-placeholder,
+#customFile:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: white;
+}
+.custom-file-label {
+  border: none;
+  height: 0;
+}
+.custom-file-label::after {
+  background: #1da83f;
+  color: white;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
 .register-show input[type="button"] {
   max-width: 150px;
   width: 100%;
-  background: #444444;
+  background: #252525;
   color: #f9f9f9;
   border: none;
   padding: 10px;
@@ -140,6 +177,8 @@ a {
   border-radius: 2px;
   float: right;
   cursor: pointer;
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 1);
+  border-radius: 5px;
 }
 .credit {
   position: absolute;
@@ -198,4 +237,7 @@ a {
 .btn-basel {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+.border-success {
+  border-color: rgba(51, 255, 0, 0.315) !important;
 }

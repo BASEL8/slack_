@@ -3,7 +3,8 @@ import "./users.css";
 const Users = ({ users, currentUser, activeChannelUsers }) => {
   return (
     <div className="card-body contacts_body h-100">
-      <ul className="contacts h-100">
+      <h4 className="text-white">Users</h4>
+      <ul className="contacts h-100 border-top border-success  pt-2">
         {activeChannelUsers &&
           activeChannelUsers.users
             .sort(function(x, y) {

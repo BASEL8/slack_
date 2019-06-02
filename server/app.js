@@ -107,11 +107,24 @@ const Channels = mongoose.model("channels");
 server.listen(3001, () => {
   io.on("connection", (socket) => {
     console.log("connected from messages");
-    socket.on("create channel", ({ channelName, by }) => {
-      new Channels({ channelName, by }).save().then((res) => {
-        io.emit("update");
-      });
-    });
+    socket.on(
+      "create channel",
+      ({ channelName, by, protectedChannel, password }) => {
+        const newChannel = new Channels({
+          channelName,
+          by,
+          password,
+          protectedChannel
+        });
+        Channels.createChannel(newChannel, function(err, user) {
+          if (err) {
+            throw err;
+          }
+          io.emit("update");
+        });
+        //
+      }
+    );
     socket.on("loggedOut", ({ _id }) => {
       io.emit("update");
     });
@@ -178,6 +191,28 @@ server.listen(3001, () => {
           }
         }
       );
+    });
+    socket.on("channel.open", ({ _id, password, userId }) => {
+      console.log(_id, password);
+
+      Channels.findOne({ _id: _id }).then((channel) => {
+        Channels.comparePassword(password, channel.password, function(
+          err,
+          isMatch
+        ) {
+          if (err) {
+            return console.log(err);
+          }
+          if (isMatch) {
+            channel.allowed.push(userId);
+            channel.save();
+            io.emit("update");
+            return console.log(null, "done");
+          } else {
+            return console.log(null, false, { message: "invalid password" });
+          }
+        });
+      });
     });
   });
 });

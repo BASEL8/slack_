@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const messages = new Schema({
+var bcrypt = require("bcryptjs");
+mongoose.set("useCreateIndex", true);
+mongoose
+  .connect("mongodb://localhost/newSlack", { useNewUrlParser: true })
+  .then(() => console.log("mongodb node auth connected"))
+  .catch((err) => console.error(err));
+const db = mongoose.connection;
+
+const messages = mongoose.Schema({
   text: { type: String, required: true },
   by: { type: String, required: true },
   date: { type: Date, default: Date.now() },
@@ -8,13 +15,13 @@ const messages = new Schema({
   edited: { type: Boolean, default: false },
   profileImage: { type: String, required: false }
 });
-const users = new Schema({
+const users = mongoose.Schema({
   name: { type: String, required: true },
   date: { type: Date, default: Date.now() },
   profileImage: { type: String, required: true }
 });
 
-const channelsSchema = new Schema({
+const channelsSchema = mongoose.Schema({
   unreadMessages: {
     type: Number,
     required: true,
@@ -33,7 +40,28 @@ const channelsSchema = new Schema({
   by: {
     type: String,
     required: true
-  }
+  },
+  protectedChannel: {
+    type: Boolean,
+    required: true
+  },
+  password: {
+    type: String
+  },
+  allowed: []
 });
 
-mongoose.model("channels", channelsSchema);
+const Channels = (module.exports = mongoose.model("channels", channelsSchema));
+module.exports.createChannel = function(newChannel, callback) {
+  bcrypt.genSalt(10, function(err, salt) {
+    bcrypt.hash(newChannel.password, salt, function(err, hash) {
+      newChannel.password = hash;
+      newChannel.save(callback);
+    });
+  });
+};
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    callback(null, isMatch);
+  });
+};
