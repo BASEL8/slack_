@@ -13,7 +13,8 @@ const messages = mongoose.Schema({
   date: { type: Date, default: Date.now() },
   userID: { type: String, required: true },
   edited: { type: Boolean, default: false },
-  profileImage: { type: String, required: false }
+  profileImage: { type: String, required: false },
+  color: { type: String }
 });
 const users = mongoose.Schema({
   name: { type: String, required: true },
@@ -48,7 +49,8 @@ const channelsSchema = mongoose.Schema({
   password: {
     type: String
   },
-  allowed: []
+  allowed: [],
+  typing: []
 });
 
 const Channels = (module.exports = mongoose.model("channels", channelsSchema));

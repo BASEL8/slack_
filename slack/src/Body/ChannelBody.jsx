@@ -10,10 +10,11 @@ const ChannelBody = ({
     channelName,
     messages,
     protectedChannel,
-    allowed
+    allowed,
+    typing
   }
 }) => {
-  console.log(messages);
+  console.log(typing);
   const [text, setText] = useState("");
   const [editMode, toggleEdit] = useState({
     status: false,
@@ -54,12 +55,35 @@ const ChannelBody = ({
       : messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(scrollToBottom, [messages]);
-
+  useEffect(() => {
+    if (text.length > 0) {
+      socket.emit("user writing", {
+        name: Data.name,
+        id: Data._id,
+        channelId: _id
+      });
+    } else {
+      socket.emit("user not writing", {
+        name: Data.name,
+        id: Data._id,
+        channelId: _id
+      });
+    }
+  }, [Data._id, Data.name, _id, socket, text]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(password);
-    socket && socket.emit("channel.open", { _id, password, userId: Data._id });
+    socket &&
+      socket.emit("channel.open", {
+        _id,
+        password,
+        userId: Data._id,
+        channelId: _id
+      });
   };
+  const usersTyping =
+    typing.filter((u) => u.id !== Data._id).length !== 0
+      ? typing.map((t) => t.name + " ") + " typing ..."
+      : null;
   return (
     <>
       <h1 className="text-white border-bottom border-success">
@@ -91,13 +115,13 @@ const ChannelBody = ({
           </div>
         </form>
       ) : (
-        <div className="flex-grow-1">
+        <div className="flex-grow-1 h-75">
           <div className="row h-100 w-100 m-0">
             <div className="w-100 h-100 ">
               <div className="d-flex flex-column h-100">
                 <ul
                   className="list-group flex-grow-1 mb-3 pb-3 test d-flex"
-                  style={{ height: 0, overflowY: "scroll" }}
+                  style={{ overflowY: "scroll", height: 0 }}
                 >
                   {messages &&
                     messages.map((message) => (
@@ -109,12 +133,14 @@ const ChannelBody = ({
                         currentUserId={Data._id}
                         toggleEdit={toggleEdit}
                         editMode={editMode}
+                        bgColor={Data.color}
                       />
                     ))}
                   <li ref={messagesEndRef} />
                 </ul>
+                <i style={{ color: "lightgray", height: 30 }}>{usersTyping}</i>
                 <form onSubmit={sendMessage}>
-                  <div className="input-group">
+                  <div className="input-group shadow">
                     <input
                       type="text"
                       className="form-control p-4"

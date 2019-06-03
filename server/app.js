@@ -128,7 +128,7 @@ server.listen(3001, () => {
     socket.on("loggedOut", ({ _id }) => {
       io.emit("update");
     });
-    socket.on("logggedIn", () => {
+    socket.on("loggedIn", () => {
       io.emit("update");
     });
     socket.on("delete.channel", ({ id }) => {
@@ -146,7 +146,8 @@ server.listen(3001, () => {
           text,
           by,
           userID,
-          profileImage: Data.profileImage
+          profileImage: Data.profileImage,
+          color: Data.color
         });
         if (!channel.users.find((x) => x.id === Data._id))
           channel.users.push(Data);
@@ -193,8 +194,6 @@ server.listen(3001, () => {
       );
     });
     socket.on("channel.open", ({ _id, password, userId }) => {
-      console.log(_id, password);
-
       Channels.findOne({ _id: _id }).then((channel) => {
         Channels.comparePassword(password, channel.password, function(
           err,
@@ -211,6 +210,32 @@ server.listen(3001, () => {
           } else {
             return console.log(null, false, { message: "invalid password" });
           }
+        });
+      });
+    });
+    socket.on("user writing", ({ name, id, channelId }) => {
+      Channels.findById(channelId, function(err, channel) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (!channel.typing.find((x) => x.id === id)) {
+          console.log("user");
+          channel.typing.push({ name, id });
+        }
+        channel.save();
+        io.emit("update");
+      });
+      socket.on("user not writing", ({ name, id, channelId }) => {
+        Channels.findById(channelId, function(err, channel) {
+          if (err) {
+            console.log(err);
+          }
+
+          console.log("user");
+          channel.typing = channel.typing.filter((user) => user.id !== id);
+          channel.save();
+          io.emit("update");
         });
       });
     });

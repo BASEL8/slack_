@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Mukta");
 #root {
   height: 100%;
-  background: rgba(0, 0, 0, 0.856);
+  background: rgba(48, 47, 47, 0.879);
 }
 body {
   font-family: "Mukta", sans-serif;
@@ -107,7 +107,7 @@ a {
   box-shadow: inset 0px 5px 10px rgba(0, 0, 0, 0.5);
   color: white;
 }
-.login-show input[type="button"] {
+.login-show input[type="submit"] {
   max-width: 150px;
   width: 100%;
   background: #1da83f;
@@ -166,7 +166,7 @@ a {
   box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
-.register-show input[type="button"] {
+.register-show input[type="submit"] {
   max-width: 150px;
   width: 100%;
   background: #252525;

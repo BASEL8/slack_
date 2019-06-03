@@ -7,7 +7,7 @@ const ChannelsList = ({ channel, index, setActiveChannel, socket }) => {
   };
   return (
     <li
-      className="list-group-item p-1 d-flex justify-content-between align-items-center"
+      className="list-group-item rounded shadow-sm mb-2 p-1 d-flex justify-content-between align-items-center"
       onMouseOver={() => toggleDelet(true)}
       onMouseLeave={() => toggleDelet(false)}
       onClick={() => setActiveChannel(index)}
@@ -27,7 +27,7 @@ const ChannelsList = ({ channel, index, setActiveChannel, socket }) => {
           </button>
         )}
         <span className="badge badge-success badge-pill">
-          {channel.users.length}
+          {channel.users.length} users
         </span>
       </div>
     </li>

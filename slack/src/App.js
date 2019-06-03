@@ -29,7 +29,8 @@ function App() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault();
     axios.post("/users/login", { username, password }).then((res) => {
       setData(res.data);
       setLoginInfo({ username, password });
@@ -41,8 +42,8 @@ function App() {
       }
     });
   };
-  const register = () => {
-    console.log(profileImage);
+  const register = (e) => {
+    e.preventDefault();
     axios
       .post("/users/register", {
         username,
@@ -52,7 +53,6 @@ function App() {
         profileImage
       })
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           setToggle(!toggleLoginPanel);
         }
@@ -100,47 +100,47 @@ function App() {
               "register-show " + (toggleLoginPanel ? null : " show-log-panel")
             }
           >
-            <h2>REGISTER</h2>
-            <input
-              type="text"
-              placeholder="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Email"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <div className="custom-file">
+            <form onSubmit={(e) => register(e)}>
+              <h2>REGISTER</h2>
               <input
-                type="file"
-                className="custom-file-input"
-                id="customFile"
+                type="text"
+                placeholder="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              <label className="custom-file-label" htmlFor="customFile">
-                Choose file
-              </label>
-            </div>
-            <input
-              className="mt-4"
-              type="button"
-              value="Register"
-              onClick={() => register()}
-            />
+              <input
+                type="text"
+                placeholder="Email"
+                value={username}
+                autoComplete="username"
+                onChange={(e) => setUserName(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                autoComplete="new-password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                autoComplete="new-password"
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <div className="custom-file">
+                <input
+                  type="file"
+                  className="custom-file-input"
+                  id="customFile"
+                />
+                <label className="custom-file-label" htmlFor="customFile">
+                  Choose file
+                </label>
+              </div>
+              <input className="mt-4" type="submit" value="Register" />
+            </form>
           </div>
 
           <div
@@ -148,20 +148,28 @@ function App() {
               "login-show " + (toggleLoginPanel ? " show-log-panel" : null)
             }
           >
-            <h2>LOGIN</h2>
-            <input
-              type="text"
-              placeholder="Email"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <input type="button" value="Login" onClick={() => login()} />
+            <form
+              onSubmit={(e) => {
+                login(e);
+              }}
+            >
+              <h2>LOGIN</h2>
+              <input
+                type="text"
+                placeholder="Email"
+                value={username}
+                autoComplete="username"
+                onChange={(e) => setUserName(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <input type="submit" value="Login" />
+            </form>
           </div>
         </div>
       </div>

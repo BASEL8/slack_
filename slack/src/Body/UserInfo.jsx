@@ -34,7 +34,7 @@ const UserInfo = ({
   };
   return (
     <div className="d-flex flex-column h-75">
-      <div className="d-flex justify-content-start align-items-center mb-5">
+      <div className="d-flex justify-content-start align-items-center mb-5 mt-3">
         <div className="user-logo">
           <img
             src="http://www.webcoderskull.com/img/team4.png"

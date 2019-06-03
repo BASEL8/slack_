@@ -25,6 +25,11 @@ const UserSchema = mongoose.Schema({
   status: {
     type: Boolean,
     default: false
+  },
+  color: {
+    type: String,
+    default:
+      "#" + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
   }
 });
 const User = (module.exports = mongoose.model("User", UserSchema));

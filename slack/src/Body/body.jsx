@@ -6,6 +6,7 @@ import Users from "./Users";
 import ChannelBody from "./ChannelBody";
 let socket = null;
 const Body = ({ Data, setAuth, setLoginInfo }) => {
+  console.log(Data);
   const [channels, setChannels] = useState([]);
   const [users, setUsers] = useState([]);
   const [activeChannel, setActiveChannel] = useState(0);
@@ -17,15 +18,17 @@ const Body = ({ Data, setAuth, setLoginInfo }) => {
     socket = socketIOClient("http://localhost:3001/");
     socket &&
       socket.on("update", (data) => {
-        console.log("update request");
         axios.post("/channels", { userId: Data._id }).then((res) => {
           setChannels(res.data.channels);
           setUsers(res.data.users);
         });
       });
-    socket.emit("logggedIn");
+    socket.emit("loggedIn");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => {
+      socket.off("update");
+    };
+  }, [Data._id, Data.id]);
   return (
     <div className="row h-100 w-100">
       <div className="col-md-2 h-100 border-right border-success pr-2">

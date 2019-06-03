@@ -33,7 +33,6 @@ router.post("/", function(req, res) {
               channel.messages = [];
             }
             channelsCopy.push(channel);
-            console.log(channelsCopy);
           });
         })
         .then(() => {
