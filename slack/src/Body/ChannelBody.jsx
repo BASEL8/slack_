@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Message from "./Message";
+import Moment from "react-moment";
+
 const ChannelBody = ({
   Data,
   userName,
@@ -11,17 +13,22 @@ const ChannelBody = ({
     messages,
     protectedChannel,
     allowed,
-    typing
+    typing,
+    by,
+    date
   }
 }) => {
-  console.log(typing);
   const [text, setText] = useState("");
   const [editMode, toggleEdit] = useState({
     status: false,
     value: "",
     messageId: "id"
   });
+  const mainInput = useRef();
   const [password, setPassword] = useState("");
+  useEffect(() => {
+    mainInput.current.focus();
+  }, [editMode.status]);
   const sendMessage = (e) => {
     e.preventDefault();
     if (editMode.status) {
@@ -86,8 +93,11 @@ const ChannelBody = ({
       : null;
   return (
     <>
-      <h1 className="text-white border-bottom border-success">
-        {channelName.toUpperCase()}
+      <h1 className="text-white border-bottom border-success d-flex justify-content-between">
+        {channelName.toUpperCase()}{" "}
+        <span className="basel-by">
+          created by : {by} ,<Moment fromNow>{date}</Moment>
+        </span>
       </h1>
       {!allowed.includes(Data._id) && protectedChannel ? (
         <form
@@ -142,6 +152,7 @@ const ChannelBody = ({
                 <form onSubmit={sendMessage}>
                   <div className="input-group shadow">
                     <input
+                      ref={mainInput}
                       type="text"
                       className="form-control p-4"
                       placeholder="Enter message"

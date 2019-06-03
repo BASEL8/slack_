@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-var bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 mongoose.set("useCreateIndex", true);
 mongoose
   .connect("mongodb://localhost/newSlack", { useNewUrlParser: true })
@@ -13,8 +13,7 @@ const messages = mongoose.Schema({
   date: { type: Date, default: Date.now() },
   userID: { type: String, required: true },
   edited: { type: Boolean, default: false },
-  profileImage: { type: String, required: false },
-  color: { type: String }
+  profileImage: { type: String, required: false }
 });
 const users = mongoose.Schema({
   name: { type: String, required: true },
@@ -52,7 +51,7 @@ const channelsSchema = mongoose.Schema({
   allowed: [],
   typing: []
 });
-
+console.log(Date.now());
 const Channels = (module.exports = mongoose.model("channels", channelsSchema));
 module.exports.createChannel = function(newChannel, callback) {
   bcrypt.genSalt(10, function(err, salt) {

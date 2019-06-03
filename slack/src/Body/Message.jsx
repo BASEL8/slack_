@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import Moment from "react-moment";
+import "../../node_modules/bootstrap/dist/css/fa.css";
 const Message = ({
   bgColor,
   channelId,
@@ -7,10 +8,10 @@ const Message = ({
   currentUserId,
   editMode,
   toggleEdit,
-  message: { by, text, _id, date, userID, edited, Data, color }
+  message: { by, text, _id, date, userID, edited }
 }) => {
-  console.log(color);
-  const [info, toggleInfo] = useState(true);
+  const [info, toggleInfo] = useState(false);
+  const [tools, toggleTools] = useState(false);
   const deleteMessage = () => {
     socket.emit("delete.message", { channelId, _id });
   };
@@ -18,11 +19,15 @@ const Message = ({
     <>
       <li
         className={
-          "message-text list-group-item  " +
+          "message-text list-group-item position-relative " +
           (currentUserId === userID ? " align-self-end" : "")
         }
         aria-disabled="true"
-        onClick={() => toggleInfo(!info)}
+        onMouseOver={() => toggleInfo(true)}
+        onMouseLeave={() => {
+          toggleInfo(false);
+          toggleTools(false);
+        }}
       >
         <div
           className={
@@ -41,31 +46,62 @@ const Message = ({
           </div>
           <div
             className={
-              "d-flex justify-content-start align-items-center w-100 rounded-pill h-100 p-2  shadow " +
+              "d-flex justify-content-start align-items-center w-100 rounded-pill h-100 p-2 position-relative shadow " +
               (currentUserId === userID ? " pl-4 mr-3 " : "pl-4 ml-3 ")
             }
-            style={{ background: color }}
+            style={{ background: "#272727" }}
           >
             {text}
+
+            {info && (
+              <>
+                <div
+                  className="m-0 position-absolute"
+                  style={{
+                    top: -25,
+                    right: currentUserId === userID ? "15px" : "unset",
+                    left: currentUserId !== userID ? "15px" : "unset"
+                  }}
+                >
+                  <Moment fromNowDuring>{date}</Moment>
+                </div>
+                <p
+                  className="m-0 basel-info position-absolute border rounded-circle border-success"
+                  style={{
+                    width: 15,
+                    height: 15,
+                    fontSize: 10,
+                    textAlign: "center",
+                    top: 11,
+                    right: currentUserId !== userID ? "-19px" : "unset",
+                    left: currentUserId === userID ? "-19px" : "unset"
+                  }}
+                  onClick={() => toggleTools(true)}
+                >
+                  i
+                </p>
+              </>
+            )}
           </div>
         </div>
-        {true && (
+        {tools && (
           <div
             className={
-              "d-flex justify-content-between align-items-center w- " +
+              "d-flex justify-content-start align-items-center w-50 position-absolute " +
               (currentUserId !== userID ? "float-right" : "float-left")
             }
+            style={{ top: 75, left: 25 }}
           >
             {currentUserId === userID && (
-              <div>
-                <button
-                  className="btn btn-sm bg-danger"
+              <>
+                <i
+                  className="mr-2 tools delete"
                   onClick={() => deleteMessage()}
                 >
-                  d
-                </button>
-                <button
-                  className="btn btn-sm bg-primary"
+                  Delete
+                </i>
+                <i
+                  className="mr-2 tools"
                   onClick={() =>
                     toggleEdit({
                       value: text,
@@ -74,12 +110,15 @@ const Message = ({
                     })
                   }
                 >
-                  e
-                </button>
-              </div>
+                  Edit
+                </i>
+              </>
             )}
-            {edited && <p className="m-0 mr-5 ml-4">Edited</p>}
-            <p className="m-0">{date}</p>
+            {edited && (
+              <p className="m-0 mr-5 ml-5">
+                <span className="text-success">&#10003; </span> Edited
+              </p>
+            )}
           </div>
         )}
       </li>

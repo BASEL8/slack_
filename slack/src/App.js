@@ -53,6 +53,7 @@ function App() {
         profileImage
       })
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           setToggle(!toggleLoginPanel);
         }

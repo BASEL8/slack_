@@ -146,8 +146,7 @@ server.listen(3001, () => {
           text,
           by,
           userID,
-          profileImage: Data.profileImage,
-          color: Data.color
+          profileImage: Data.profileImage
         });
         if (!channel.users.find((x) => x.id === Data._id))
           channel.users.push(Data);

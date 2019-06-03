@@ -6,7 +6,6 @@ import Users from "./Users";
 import ChannelBody from "./ChannelBody";
 let socket = null;
 const Body = ({ Data, setAuth, setLoginInfo }) => {
-  console.log(Data);
   const [channels, setChannels] = useState([]);
   const [users, setUsers] = useState([]);
   const [activeChannel, setActiveChannel] = useState(0);

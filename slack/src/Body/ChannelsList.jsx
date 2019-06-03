@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 
 const ChannelsList = ({ channel, index, setActiveChannel, socket }) => {
-  const [deleteBtn, toggleDelet] = useState(false);
+  const [deleteBtn, toggleDelete] = useState(false);
   const deleteChannel = (id) => {
     socket.emit("delete.channel", { id });
   };
   return (
     <li
       className="list-group-item rounded shadow-sm mb-2 p-1 d-flex justify-content-between align-items-center"
-      onMouseOver={() => toggleDelet(true)}
-      onMouseLeave={() => toggleDelet(false)}
+      onMouseOver={() => toggleDelete(true)}
+      onMouseLeave={() => toggleDelete(false)}
       onClick={() => setActiveChannel(index)}
     >
       # {channel.channelName}
