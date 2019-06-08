@@ -15,6 +15,7 @@ const Message = ({
   const deleteMessage = () => {
     socket.emit("delete.message", { channelId, _id });
   };
+  console.log(new Date(date).toLocaleString());
   return (
     <>
       <li
@@ -63,7 +64,7 @@ const Message = ({
                     left: currentUserId !== userID ? "15px" : "unset"
                   }}
                 >
-                  <Moment fromNowDuring>{date}</Moment>
+                  <Moment fromNow={true}>{date}</Moment>
                 </div>
                 <p
                   className="m-0 basel-info position-absolute border rounded-circle border-success"

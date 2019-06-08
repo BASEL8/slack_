@@ -24,6 +24,13 @@ const ChannelBody = ({
     value: "",
     messageId: "id"
   });
+  //join room test start
+  useEffect(() => {
+    socket.emit("joinRoom", channelName, (newNumbersOfMembers) => {
+      console.log(newNumbersOfMembers);
+    });
+  }, [channelName, socket]);
+  //join room test end
   const mainInput = useRef();
   const [password, setPassword] = useState("");
   useEffect(() => {

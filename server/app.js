@@ -114,7 +114,8 @@ server.listen(3001, () => {
           channelName,
           by,
           password,
-          protectedChannel
+          protectedChannel,
+          date: Date.now()
         });
         Channels.createChannel(newChannel, function(err, user) {
           if (err) {
@@ -141,12 +142,14 @@ server.listen(3001, () => {
       });
     });
     socket.on("message.sent", ({ _id, text, by, Data, userID }) => {
+      console.log(Date.now());
       Channels.findOne({ _id: _id }).then((channel) => {
         channel.messages.push({
           text,
           by,
           userID,
-          profileImage: Data.profileImage
+          profileImage: Data.profileImage,
+          date: Date.now()
         });
         if (!channel.users.find((x) => x.id === Data._id))
           channel.users.push(Data);
@@ -238,5 +241,17 @@ server.listen(3001, () => {
         });
       });
     });
+    //join room test start
+    socket.on("joinRoom", (roomToJoin, numberOfMembersCallback) => {
+      socket.join(roomToJoin, () => {
+        let rooms = Object.keys(socket.rooms);
+        console.log(rooms, "rooms");
+      });
+      io.in(roomToJoin).clients((err, clients) => {
+        console.log(clients, "clients");
+        numberOfMembersCallback(clients.length);
+      });
+    });
+    //join room test end
   });
 });
